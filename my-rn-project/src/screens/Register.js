@@ -32,7 +32,7 @@ class Register extends Component {
   }
 
   irALogin(){
-    this.props.navigation.navigate("login")
+    this.props.navigation.navigate('login')
   }
 
   // Método que maneja el envío del formulario
@@ -160,7 +160,7 @@ class Register extends Component {
           '' : 
           <TouchableOpacity
             style={styles.btn}
-            onPress={() => this.onSubmit(this.state.email, this.state.password, this.state.name)}
+            onPress={() => this.onSubmit(this.state.email, this.state.password, this.state.name) }
             disabled={this.state.loading}
           >
             {/* Si está cargando, muestra el indicador de carga */}
@@ -169,6 +169,7 @@ class Register extends Component {
             ) : (
               <Text style={styles.textBtn}>Registrarme</Text>
             )}
+             
           </TouchableOpacity>
           
 
