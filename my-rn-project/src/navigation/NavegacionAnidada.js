@@ -24,7 +24,7 @@ export default class NavegacionAnidada extends Component {
       />
 
         <Tab.Screen 
-          name='profile' 
+          name='Perfil' 
           component={Profile}  
           options={{
               headerShown: false,
@@ -32,7 +32,7 @@ export default class NavegacionAnidada extends Component {
           }}
       />
       <Tab.Screen 
-          name='buscador' 
+          name='Buscador' 
           component={BuscadorUsers}  
           options={{
               headerShown: false,
@@ -40,7 +40,7 @@ export default class NavegacionAnidada extends Component {
           }}
       />
         <Tab.Screen
-          name='crearPost' 
+          name='Crear posteo' 
           component={CrearPost}
           options={{
               headerShown: false,

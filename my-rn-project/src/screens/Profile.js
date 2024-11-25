@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
 import { Text, View, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
+import React, { Component } from 'react';
 import { db, auth } from '../firebase/config';
 
 export default class Profile extends Component {
@@ -14,20 +14,14 @@ export default class Profile extends Component {
   cerrarSesion() {
     auth.signOut()
       .then(() => {
-        this.props.navigation.navigate('login');
+        this.props.navigation.navigate('menu'); // Navegar al menu después de cerrar sesión
       })
       .catch(error => console.error('Error al cerrar sesión:', error));
   }
 
   borrarPosteo(id) {
-    console.log('Intentando eliminar post con ID:', id); // Debugging
     db.collection('posts').doc(id).delete()
-      .then(() => {
-        console.log('Posteo eliminado:', id);
-        this.setState((prevState) => ({
-          posts: prevState.posts.filter(post => post.id !== id),
-        }));
-      })
+      .then(() => console.log('Posteo eliminado:', id))
       .catch(err => console.error('Error eliminando el posteo:', err));
   }
 
@@ -52,8 +46,8 @@ export default class Profile extends Component {
 
     // Cargar posteos del usuario
     db.collection('posts')
-      .where('owner', '==', userEmail)
       .orderBy('createdAt', "desc")
+      .where('owner', '==', userEmail)
       .onSnapshot(
         snapshot => {
           const posteos = snapshot.docs.map(doc => ({
@@ -80,6 +74,7 @@ export default class Profile extends Component {
           Mis posteos: {this.state.posts.length >= 0 ? this.state.posts.length : 'Cargando...'}
         </Text>
 
+        <View style={style.flatlist}>
         <FlatList
           data={this.state.posts}
           keyExtractor={(item) => item.id}
@@ -95,6 +90,7 @@ export default class Profile extends Component {
             </View>
           )}
         />
+        </View>
 
         <TouchableOpacity
           onPress={() => this.cerrarSesion()}
@@ -113,73 +109,78 @@ const style = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    backgroundColor: '#f0f4f8',
+    backgroundColor: '#f0f4f8', // Fondo claro
+  },
+  flatlist: {
+    width: "100%",
+    flex: 2,
+    justifyContent:'center'
   },
   titulo: {
-    fontSize: 36,
+    fontSize: 36, // Título destacado y grande
     fontWeight: 'bold',
-    letterSpacing: 2,
-    marginBottom: 20,
-    color: '#000',
+    letterSpacing: 2, // Espaciado entre letras
+    marginBottom: 40, // Más espacio debajo del título
+    color: '#2c3e50', // Azul oscuro
     textAlign: 'center',
   },
   info: {
     fontSize: 18,
-    color: '#34495e',
+    color: '#34495e', // Color gris
     marginBottom: 10,
     textAlign: 'center',
   },
+  // Estilos para cada posteo
   post: {
-    backgroundColor: 'white',
-    padding: 20,
+    backgroundColor: 'white', // Fondo suave para cada post
+    padding: 40,
     marginBottom: 20,
+    marginTop: 20,
     borderRadius: 8,
-    width: '100%',
+    width: '20%',
     shadowColor: '#bdc3c7',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 5,
-    elevation: 5,
-    borderWidth: 1,
-    borderColor: '#000',
-    alignItems: 'center',
+    elevation: 5, // Sombra para dispositivos Android
+    borderWidth: 1, 
+    borderColor: '#000', 
+    alignItems:"center",
+    alignSelf: 'center'
   },
   postText: {
     fontSize: 16,
-    color: '#2c3e50',
+    color: '#2c3e50', // Texto oscuro
     marginBottom: 10,
   },
+  postDate: {
+    fontSize: 12,
+    color: '#95a5a6', // Color gris claro para la fecha
+    marginBottom: 10,
+  },
+  // Estilo para el botón de eliminar
   deleteButton: {
-    backgroundColor: 'transparent',
+    backgroundColor: 'transparent', // Sin fondo
     paddingVertical: 5,
     paddingHorizontal: 15,
     borderRadius: 5,
-    borderWidth: 1,
-    borderColor: '#e74c3c',
-    marginTop: 10,
+    width: '100%',
+    alignSelf: 'center', // Centrado
+    borderWidth: 1, // Borde del botón
+    borderColor: '#e74c3c', // Borde rojo
+    marginTop: 20
   },
   deleteButtonText: {
-    color: '#e74c3c',
+    color: '#e74c3c', // Letras rojas
     fontWeight: 'bold',
     textAlign: 'center',
     fontSize: 16,
   },
-  boton: {
-    backgroundColor: '#3498db',
-    padding: 15,
-    borderRadius: 12,
-    marginTop: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 5,
-    width: '90%',
-    alignItems: 'center',
-  },
   textoBoton: {
-    color: '#fff',
-    fontSize: 18,
+    fontSize: 23, // Texto blanco grande
+    color: '#4d90fe', // Texto blanco
+    fontWeight: 'bold',
+    letterSpacing: 1, // Espaciado adicional
     textAlign: 'center',
   },
 });
